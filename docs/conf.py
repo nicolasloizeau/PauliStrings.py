@@ -37,3 +37,7 @@ html_context = {
     "github_version": "main",
     "conf_py_path": "/docs/",
 }
+
+html_logo = "logo_cat_small.svg"
+html_favicon = 'favicon.png'
+html_css_files = ['custom.css',]

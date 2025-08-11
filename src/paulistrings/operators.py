@@ -56,6 +56,33 @@ class Operator:
             raise TypeError(f"unsupported operand type(s) for +: 'Operator' and '{type(other).__name__}'")
 
 
+    def __mul__(self, other):
+        """
+        Multiply this operator by another object.
+
+        Parameters
+        ----------
+        other : Operator or scalar
+            The object to multiply this operator by.
+
+        Returns
+        -------
+        Operator
+            A new Operator representing the product.
+
+        """
+        from . import operations
+        if isinstance(other, numbers.Number):
+            O = Operator(self.N)
+            O.strings = self.strings.copy()
+            O.coeffs = np.array(self.coeffs) * other
+            return O
+        elif isinstance(other, Operator):
+            return operations.mul(self, other)
+
+    def __rmul__(self, other):
+        return self * other
+
     def __str__(self):
         s = ""
         for (u, v), coeff in zip(self.strings, self.coeffs):
