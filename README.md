@@ -12,12 +12,17 @@ From github:
 pip install git+https://github.com/nicolasloizeau/paulistrings.py.git
 ```
 
-##  Install dev
+##  Develop:
+Install dev version
 ```
 pip install -e .[dev]
 ```
-
-##  Run tests
+Run tests
 ```
 pytest
+```
+Make the documentation
+```
+cd docs
+make html
 ```
