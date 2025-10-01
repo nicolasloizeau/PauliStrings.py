@@ -1,5 +1,3 @@
-
-
 def string_to_vw(pauli: str):
     """
     Convert a Pauli string ('X', 'Y', 'Z' characters) to binary vectors v and w.
@@ -13,20 +11,21 @@ def string_to_vw(pauli: str):
     v = 0
     w = 0
     for k in range(len(pauli)):
-        if pauli[k] == 'X':
-            w += 2 ** k
-        elif pauli[k] == 'Z':
-            v += 2 ** k
-        elif pauli[k] == 'Y':
-            w += 2 ** k
-            v += 2 ** k
-    c = 1j**pauli.count("Y")
+        if pauli[k] == "X":
+            w += 2**k
+        elif pauli[k] == "Z":
+            v += 2**k
+        elif pauli[k] == "Y":
+            w += 2**k
+            v += 2**k
+    c = 1j ** pauli.count("Y")
     return v, w, c
 
 
 def bit(value, position):
     """Check if the bit at position is set (1-indexed)."""
     return (int(value) & (1 << int(position))) != 0
+
 
 def vw_to_string(v, w, N):
     """
@@ -45,13 +44,13 @@ def vw_to_string(v, w, N):
     phase = complex(1, 0)
     for i in range(N):
         if not bit(v, i) and not bit(w, i):
-            result_string += '1'
+            result_string += "1"
         elif not bit(v, i) and bit(w, i):
-            result_string += 'X'
+            result_string += "X"
         elif bit(v, i) and not bit(w, i):
-            result_string += 'Z'
+            result_string += "Z"
         elif bit(v, i) and bit(w, i):
-            result_string += 'Y'
+            result_string += "Y"
             phase *= complex(0, 1)
 
     return result_string, phase
@@ -62,12 +61,40 @@ def local_term_to_str(term, N):
     Convert something like (1, "X", 2, "Z", 3) to "11XZ" with coefficient 1.
     """
     coeff = 1
-    if len(term)%2 == 1:
+    if len(term) % 2 == 1:
         coeff = term[0]
         term = term[1:]
     s = ["1"] * N
-    for i in range(len(term)//2):
-        symbol = term[2*i]
-        index = term[2*i + 1]
+    for i in range(len(term) // 2):
+        symbol = term[2 * i]
+        index = term[2 * i + 1]
         s[index] = symbol
     return coeff, s
+
+
+def _format_float(x):
+    """Format a float with adaptive precision."""
+    if abs(x) < 1e-10:  # Handle very small numbers as 0
+        return "0.0"
+    # Convert to string with high precision first
+    s = f"{x:.10f}".rstrip("0")
+    # If it ends with decimal point, add a zero
+    if s.endswith("."):
+        s += "0"
+    return s
+
+
+def _complex_str(z):
+    """Format a complex number as (a±bj) with adaptive precision."""
+    a, b = z.real, z.imag
+    real_str = _format_float(a)
+    imag_str = _format_float(abs(b))
+    return f"({real_str} {'+' if b >= 0 else '-'} {imag_str}j)"
+
+
+def operator_to_string(o):
+    s = ""
+    for (u, v), coeff in zip(o.strings, o.coeffs):
+        string, phase = vw_to_string(u, v, o.N)
+        s += f"{_complex_str(coeff / phase)} {string}\n"
+    return s

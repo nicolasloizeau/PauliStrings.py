@@ -9,30 +9,62 @@ class Operator:
         self.strings = []
         self.coeffs = []
 
-    def add_string_uv(self, u:int, v:int, coeff:complex):
+    def add_string_uv(self, u: int, v: int, coeff: complex):
         self.strings.append((u, v))
         self.coeffs.append(coeff)
 
-    def add_string_str(self, s:str, coeff:complex):
-        u,v,phase = inout.string_to_vw(s)
+    def add_string_str(self, s: str, coeff: complex):
+        u, v, phase = inout.string_to_vw(s)
         c = coeff * phase
-        self.add_string_uv(u,v, c)
-
+        self.add_string_uv(u, v, c)
 
     def __add__(self, other):
+        """
+        Add another object to this operator.
+
+        Parameters
+        ----------
+        other : str, tuple, Operator, or number
+            The object to add to this operator:
+              - str: a Pauli string to add with coefficient 1
+              - tuple: a Pauli string and coefficient
+              - Operator: another Operator instance
+              - number: identity operator times a constant
+
+        Returns
+        -------
+        Operator
+            A new operator representing the sum.
+
+        Raises
+        ------
+        TypeError
+            If other cannot be added to an operator
+        """
         if isinstance(other, str):
             self.add_string_str(other, 1)
             return self
-        elif isinstance(other, tuple) and len(other) == 2 and isinstance(other[0], numbers.Number) and isinstance(other[1], str):
-            self.add_string_str(other[1], other[0])
-            return self
+        elif (
+            isinstance(other, tuple)
+            and len(other) == 2
+            and isinstance(other[0], numbers.Number)
+            and isinstance(other[1], str)
+        ):
+            o2 = Operator(self.N)
+            o2.add_string_str(other[1], other[0])
+            return self + o2
         elif isinstance(other, tuple):
             c, s = inout.local_term_to_str(other, self.N)
-            self.add_string_str(s, c)
-            return self
+            o2 = Operator(self.N)
+            o2.add_string_str(s, c)
+            return self + o2
         elif isinstance(other, Operator):
             from . import operations
+
             return operations.add(self, other)
+        elif isinstance(other, numbers.Number):
+            return self + identity(self.N) * other
+
         else:
             raise TypeError(f"unsupported operand type(s) for +: 'Operator' and '{type(other).__name__}'")
 
@@ -43,6 +75,28 @@ class Operator:
         return O
 
     def __sub__(self, other):
+        """
+        Subtract another object from this operator.
+
+        Parameters
+        ----------
+        other : str, tuple, Operator, or number
+            The object to subtract from this operator:
+              - str: a Pauli string to subtract with coefficient 1
+              - tuple: a Pauli string and coefficient
+              - Operator: another Operator instance
+              - number: identity operator times a constant
+
+        Returns
+        -------
+        Operator
+            A new operator representing the difference.
+
+        Raises
+        ------
+        TypeError
+            If other cannot be subtracted from an operator
+        """
         if isinstance(other, Operator):
             return self + -other
         elif isinstance(other, str):
@@ -54,7 +108,6 @@ class Operator:
             return self + -O
         else:
             raise TypeError(f"unsupported operand type(s) for +: 'Operator' and '{type(other).__name__}'")
-
 
     def __mul__(self, other):
         """
@@ -72,6 +125,7 @@ class Operator:
 
         """
         from . import operations
+
         if isinstance(other, numbers.Number):
             O = Operator(self.N)
             O.strings = self.strings.copy()
@@ -83,9 +137,44 @@ class Operator:
     def __rmul__(self, other):
         return self * other
 
+    def __truediv__(self, other):
+        """
+        Divide this operator by a scalar.
+
+        Parameters
+        ----------
+        other : scalar
+            The number to divide this operator by.
+
+        Returns
+        -------
+        Operator
+            A new Operator representing the quotient.
+
+        Raises
+        ------
+        TypeError
+            If other is not a number
+        ZeroDivisionError
+            If other is zero
+        """
+        if isinstance(other, numbers.Number):
+            if other == 0:
+                raise ZeroDivisionError("Division by zero")
+            O = Operator(self.N)
+            O.strings = self.strings.copy()
+            O.coeffs = np.array(self.coeffs) / other
+            return O
+        else:
+            raise TypeError(f"unsupported operand type(s) for /: 'Operator' and '{type(other).__name__}'")
+
     def __str__(self):
-        s = ""
-        for (u, v), coeff in zip(self.strings, self.coeffs):
-            string, phase = inout.vw_to_string(u, v, self.N)
-            s += f"{coeff/phase} {string}\n"
-        return s
+        return inout.operator_to_string(self)
+
+
+def identity(N):
+    """Return the identity operator on N qubits."""
+    o = Operator(N)
+    o.strings = [(0, 0)]
+    o.coeffs = [1.0]
+    return o

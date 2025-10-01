@@ -3,11 +3,12 @@ from . import cpp_operations
 import numpy as np
 
 
-def opnorm(o:Operator):
-    return np.linalg.norm(o.coeffs)*(2**(o.N/2))
+def opnorm(o: Operator):
+    return np.linalg.norm(o.coeffs) * (2 ** (o.N / 2))
 
-def trace(o:Operator):
-    return o.coeffs[np.all(o.strings == 0, axis=1)].sum()*2**o.N
+
+def trace(o: Operator):
+    return o.coeffs[np.all(o.strings == 0, axis=1)].sum() * 2**o.N
 
 
 def operator_from_dict(d, N):
@@ -16,10 +17,12 @@ def operator_from_dict(d, N):
     o.coeffs = np.array(list(d.values()))
     return o
 
+
 def operator_to_dict(o: Operator):
     strings = [tuple(s) for s in o.strings]
     coeffs = o.coeffs
     return dict(zip(strings, coeffs))
+
 
 def add(o1: Operator, o2: Operator):
     assert o1.N == o2.N, "Operators must have the same number of qubits"
@@ -93,6 +96,7 @@ def multiply_cpp(o1: Operator, o2: Operator):
     o3.coeffs = coeffs
     return o3
 
+
 def commutator_cpp(o1: Operator, o2: Operator):
     o3 = Operator(o1.N)
     strings, coeffs = cpp_operations.commutator(cpp_operator(o1), cpp_operator(o2))
@@ -107,3 +111,32 @@ def add_cpp(o1: Operator, o2: Operator):
     o3.strings = strings
     o3.coeffs = coeffs
     return o3
+
+
+def pauli_weight(string):
+    v, w = string
+    return (v | w).bit_count()
+
+
+def ycount(string: tuple) -> int:
+    """Count the number of Y operators in a Pauli string."""
+    v, w = string
+    return (v & w).bit_count()
+
+
+def dagger(o: Operator) -> Operator:
+    """Return the Hermitian conjugate (dagger) of an operator.
+
+    Args:
+        o: Input operator
+
+    Returns:
+        A new operator representing o†
+    """
+    o2 = Operator(o.N)
+    o2.strings = o.strings.copy()
+    o2.coeffs = np.copy(o.coeffs)
+    for i in range(len(o2.strings)):
+        sign = 1 - ((ycount(o2.strings[i]) & 1) << 1)  # Computes 1 or -1 based on Y count
+        o2.coeffs[i] = sign * np.conj(o2.coeffs[i])
+    return o2

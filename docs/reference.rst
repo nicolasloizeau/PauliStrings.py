@@ -6,10 +6,19 @@ Core Functions
 
 .. autofunction:: paulistrings.Operator
 .. autofunction:: paulistrings.Operator.__mul__
+.. autofunction:: paulistrings.Operator.__add__
+.. autofunction:: paulistrings.Operator.__sub__
+.. autofunction:: paulistrings.Operator.__truediv__
+.. autofunction:: paulistrings.Operator.__str__
 .. autofunction:: paulistrings.commutator
 .. autofunction:: paulistrings.anticommutator
+
 
 
 Truncation
 ---------------
 .. autofunction:: paulistrings.cutoff
+.. autofunction:: paulistrings.truncate
+.. autofunction:: paulistrings.trim
+.. autofunction:: paulistrings.add_noise
+.. autofunction:: paulistrings.k_local_part

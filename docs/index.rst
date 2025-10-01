@@ -9,5 +9,6 @@ This is a Python version of `PauliStrings.jl <https://paulistrings.org/>`_. The 
    :maxdepth: 2
    :caption: Contents:
 
-   installation
+   getting_started
+   tutorials/index
    reference
