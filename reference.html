@@ -50,8 +50,25 @@
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#core-functions">Core Functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#truncation">Truncation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#core-functions">Core Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.Operator"><code class="docutils literal notranslate"><span class="pre">Operator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.Operator.__mul__"><code class="docutils literal notranslate"><span class="pre">__mul__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.Operator.__add__"><code class="docutils literal notranslate"><span class="pre">__add__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.Operator.__sub__"><code class="docutils literal notranslate"><span class="pre">__sub__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.Operator.__truediv__"><code class="docutils literal notranslate"><span class="pre">__truediv__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.Operator.__str__"><code class="docutils literal notranslate"><span class="pre">__str__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.commutator"><code class="docutils literal notranslate"><span class="pre">commutator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.anticommutator"><code class="docutils literal notranslate"><span class="pre">anticommutator()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#truncation">Truncation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.cutoff"><code class="docutils literal notranslate"><span class="pre">cutoff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.truncate"><code class="docutils literal notranslate"><span class="pre">truncate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.trim"><code class="docutils literal notranslate"><span class="pre">trim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.add_noise"><code class="docutils literal notranslate"><span class="pre">add_noise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#paulistrings.k_local_part"><code class="docutils literal notranslate"><span class="pre">k_local_part()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -84,9 +101,266 @@
 <h1>Reference<a class="headerlink" href="#reference" title="Link to this heading"></a></h1>
 <section id="core-functions">
 <h2>Core Functions<a class="headerlink" href="#core-functions" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.Operator">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.</span></span><span class="sig-name descname"><span class="pre">Operator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nicolasloizeau/PauliStrings.py/blob/2eb42aff15fef6fd5c0c7b35cb4df26425373f24/src/paulistrings/operators.py#L6-L172"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#paulistrings.Operator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.Operator.__mul__">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.Operator.</span></span><span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paulistrings.Operator.__mul__" title="Link to this definition"></a></dt>
+<dd><p>Multiply this operator by another object.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>other<span class="classifier">Operator or scalar</span></dt><dd><p>The object to multiply this operator by.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>Operator</dt><dd><p>A new Operator representing the product.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.Operator.__add__">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.Operator.</span></span><span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paulistrings.Operator.__add__" title="Link to this definition"></a></dt>
+<dd><p>Add another object to this operator.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>other<span class="classifier">str, tuple, Operator, or number</span></dt><dd><dl class="simple">
+<dt>The object to add to this operator:</dt><dd><ul class="simple">
+<li><p>str: a Pauli string to add with coefficient 1</p></li>
+<li><p>tuple: a Pauli string and coefficient</p></li>
+<li><p>Operator: another Operator instance</p></li>
+<li><p>number: identity operator times a constant</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>Operator</dt><dd><p>A new operator representing the sum.</p>
+</dd>
+</dl>
+</section>
+<section id="raises">
+<h3>Raises<a class="headerlink" href="#raises" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>TypeError</dt><dd><p>If other cannot be added to an operator</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.Operator.__sub__">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.Operator.</span></span><span class="sig-name descname"><span class="pre">__sub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paulistrings.Operator.__sub__" title="Link to this definition"></a></dt>
+<dd><p>Subtract another object from this operator.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>other<span class="classifier">str, tuple, Operator, or number</span></dt><dd><dl class="simple">
+<dt>The object to subtract from this operator:</dt><dd><ul class="simple">
+<li><p>str: a Pauli string to subtract with coefficient 1</p></li>
+<li><p>tuple: a Pauli string and coefficient</p></li>
+<li><p>Operator: another Operator instance</p></li>
+<li><p>number: identity operator times a constant</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>Operator</dt><dd><p>A new operator representing the difference.</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h3>Raises<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>TypeError</dt><dd><p>If other cannot be subtracted from an operator</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.Operator.__truediv__">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.Operator.</span></span><span class="sig-name descname"><span class="pre">__truediv__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paulistrings.Operator.__truediv__" title="Link to this definition"></a></dt>
+<dd><p>Divide this operator by a scalar.</p>
+<section id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>other<span class="classifier">scalar</span></dt><dd><p>The number to divide this operator by.</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h3>Returns<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>Operator</dt><dd><p>A new Operator representing the quotient.</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h3>Raises<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>TypeError</dt><dd><p>If other is not a number</p>
+</dd>
+<dt>ZeroDivisionError</dt><dd><p>If other is zero</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.Operator.__str__">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.Operator.</span></span><span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#paulistrings.Operator.__str__" title="Link to this definition"></a></dt>
+<dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.commutator">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.</span></span><span class="sig-name descname"><span class="pre">commutator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">o2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Operator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nicolasloizeau/PauliStrings.py/blob/2eb42aff15fef6fd5c0c7b35cb4df26425373f24/src/paulistrings/operations.py#L78-L79"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#paulistrings.commutator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.anticommutator">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.</span></span><span class="sig-name descname"><span class="pre">anticommutator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">o2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Operator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nicolasloizeau/PauliStrings.py/blob/2eb42aff15fef6fd5c0c7b35cb4df26425373f24/src/paulistrings/operations.py#L82-L83"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#paulistrings.anticommutator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="truncation">
 <h2>Truncation<a class="headerlink" href="#truncation" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.cutoff">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.</span></span><span class="sig-name descname"><span class="pre">cutoff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/nicolasloizeau/PauliStrings.py/blob/2eb42aff15fef6fd5c0c7b35cb4df26425373f24/src/paulistrings/truncation.py#L5-L26"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#paulistrings.cutoff" title="Link to this definition"></a></dt>
+<dd><p>Remove all terms with weight &lt; epsilon</p>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>o: Operator</dt><dd><p>The input operator to filter.</p>
+</dd>
+<dt>epsilon: float</dt><dd><p>The cutoff threshold. Terms with coefficients whose
+absolute value is less than this will be removed.</p>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h3>Returns<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Operator</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.truncate">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.</span></span><span class="sig-name descname"><span class="pre">truncate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Operator</span></span></span><a class="reference external" href="https://github.com/nicolasloizeau/PauliStrings.py/blob/2eb42aff15fef6fd5c0c7b35cb4df26425373f24/src/paulistrings/truncation.py#L29-L53"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#paulistrings.truncate" title="Link to this definition"></a></dt>
+<dd><p>Remove all terms with Pauli lenght &gt; max_length.</p>
+<section id="id11">
+<h3>Parameters<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>o: Operator</dt><dd><p>The input operator to filter.</p>
+</dd>
+<dt>max_length: int</dt><dd><p>The maximum Pauli weight to keep. Terms with Pauli weight
+greater than this will be removed.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h3>Returns<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Operator</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.trim">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.</span></span><span class="sig-name descname"><span class="pre">trim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_strings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Operator</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Operator</span></span></span><a class="reference external" href="https://github.com/nicolasloizeau/PauliStrings.py/blob/2eb42aff15fef6fd5c0c7b35cb4df26425373f24/src/paulistrings/truncation.py#L86-L132"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#paulistrings.trim" title="Link to this definition"></a></dt>
+<dd><p>Keep the max_strings Pauli terms with largest absolute coefficients, optionally keeping a specified subset of terms.</p>
+<section id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>o: Operator</dt><dd><p>The input operator to trim.</p>
+</dd>
+<dt>max_strings: int</dt><dd><p>Maximum number of strings to keep in the trimmed operator.</p>
+</dd>
+<dt>keep: Operator, optional</dt><dd><p>Operator containing terms that should be kept in the output regardless
+of coefficient size. Default is None.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h3>Returns<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Operator</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.add_noise">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.</span></span><span class="sig-name descname"><span class="pre">add_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Operator</span></span></span><a class="reference external" href="https://github.com/nicolasloizeau/PauliStrings.py/blob/2eb42aff15fef6fd5c0c7b35cb4df26425373f24/src/paulistrings/truncation.py#L135-L160"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#paulistrings.add_noise" title="Link to this definition"></a></dt>
+<dd><p>Add depolarizing noise that make the long string decays.
+g is the noise amplitude. Each string is multiplied by exp(-g * w), where w is the number of non-identity Paulis in the string.</p>
+<section id="id15">
+<h3>Parameters<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>o: Operator</dt><dd><p>The input operator to add noise to.</p>
+</dd>
+<dt>g: float</dt><dd><p>The noise parameter that controls the exponential decay of coefficients.</p>
+</dd>
+</dl>
+</section>
+<section id="id16">
+<h3>Returns<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<blockquote>
+<div><dl class="simple">
+<dt>Operator</dt><dd><p>A new operator with noise-modified coefficients.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="paulistrings.k_local_part">
+<span class="sig-prename descclassname"><span class="pre">paulistrings.</span></span><span class="sig-name descname"><span class="pre">k_local_part</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atmost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Operator</span></span></span><a class="reference external" href="https://github.com/nicolasloizeau/PauliStrings.py/blob/2eb42aff15fef6fd5c0c7b35cb4df26425373f24/src/paulistrings/truncation.py#L56-L83"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#paulistrings.k_local_part" title="Link to this definition"></a></dt>
+<dd><p>Return the k-local part of an operator (terms with exactly k or at-most k non-unit Paulis).</p>
+<section id="id17">
+<h3>Parameters<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>o: Operator</dt><dd><p>The input operator to filter.</p>
+</dd>
+<dt>k: int</dt><dd><p>The Pauli lenght to filter for.</p>
+</dd>
+<dt>atmost: bool</dt><dd><p>If True, will keep terms with Pauli lenght &lt;= k.
+If False, will only keep terms with Pauli lenght exactly = k.</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h3>Returns<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Operator</p>
+</div></blockquote>
+</section>
+</dd></dl>
+
 </section>
 </section>
 
