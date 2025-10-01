@@ -18,6 +18,7 @@ jobs:
 
       - name: Install requirements
         run: |
+          pip install numpy
           pip install -e ".[dev]"
           pip3 install sphinx-rtd-theme
           pip3 install sphinx-github-style

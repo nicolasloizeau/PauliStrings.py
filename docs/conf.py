@@ -8,17 +8,6 @@
 import sphinx_rtd_theme
 
 
-import os
-import sys
-
-sys.path.insert(0, os.path.abspath(".."))  # Add the parent directory to the path
-
-# Also make sure paulistrings is installed
-import subprocess
-
-subprocess.check_call(["pip", "install", "-e", ".."])
-
-
 project = "Pauli Strings Python"
 copyright = "2025, Nicolas Loizeau"
 author = "Nicolas Loizeau"
