@@ -1,17 +1,31 @@
 from .operators import Operator
+from . import cpp_operations
+import numpy as np
+
+
+def opnorm(o:Operator):
+    return np.linalg.norm(o.coeffs)*(2**(o.N/2))
+
+def trace(o:Operator):
+    return o.coeffs[np.all(o.strings == 0, axis=1)].sum()*2**o.N
 
 
 def operator_from_dict(d, N):
     o = Operator(N)
-    o.strings = list(d.keys())
-    o.coeffs = list(d.values())
+    o.strings = np.array(list(d.keys()))
+    o.coeffs = np.array(list(d.values()))
     return o
 
+def operator_to_dict(o: Operator):
+    strings = [tuple(s) for s in o.strings]
+    coeffs = o.coeffs
+    return dict(zip(strings, coeffs))
 
 def add(o1: Operator, o2: Operator):
     assert o1.N == o2.N, "Operators must have the same number of qubits"
-    d = dict(zip(o1.strings, o1.coeffs))
+    d = operator_to_dict(o1)
     for s, c in zip(o2.strings, o2.coeffs):
+        s = tuple(s)
         if s in d:
             d[s] += c
         else:
@@ -66,4 +80,30 @@ def anticommutator(o1: Operator, o2: Operator):
     return binary_kernel(string_anticommutator, o1, o2)
 
 
-# def cpp_add(o1: Operator, o2: Operator):
+def cpp_operator(op):
+    strings = np.array(op.strings, dtype=np.uint64)
+    coeffs = np.array(op.coeffs, dtype=np.complex128)
+    return (strings, coeffs)
+
+
+def multiply_cpp(o1: Operator, o2: Operator):
+    o3 = Operator(o1.N)
+    strings, coeffs = cpp_operations.multiply(cpp_operator(o1), cpp_operator(o2))
+    o3.strings = strings
+    o3.coeffs = coeffs
+    return o3
+
+def commutator_cpp(o1: Operator, o2: Operator):
+    o3 = Operator(o1.N)
+    strings, coeffs = cpp_operations.commutator(cpp_operator(o1), cpp_operator(o2))
+    o3.strings = strings
+    o3.coeffs = coeffs
+    return o3
+
+
+def add_cpp(o1: Operator, o2: Operator):
+    o3 = Operator(o1.N)
+    strings, coeffs = cpp_operations.add(cpp_operator(o1), cpp_operator(o2))
+    o3.strings = strings
+    o3.coeffs = coeffs
+    return o3
