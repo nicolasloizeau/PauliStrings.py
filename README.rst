@@ -18,7 +18,9 @@
     :target: https://scipost.org/SciPostPhysCodeb.54
     :alt: SciPost
 
-
+=================
+PauliStrings Python
+=================
 
 Getting started
 ================
