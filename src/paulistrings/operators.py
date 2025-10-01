@@ -78,7 +78,7 @@ class Operator:
             O.coeffs = np.array(self.coeffs) * other
             return O
         elif isinstance(other, Operator):
-            return operations.mul(self, other)
+            return operations.multiply(self, other)
 
     def __rmul__(self, other):
         return self * other

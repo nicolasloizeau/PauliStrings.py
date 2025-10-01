@@ -8,7 +8,7 @@
 import sphinx_rtd_theme
 
 
-project = 'Pauli Strings'
+project = 'Pauli Strings Python'
 copyright = '2025, Nicolas Loizeau'
 author = 'Nicolas Loizeau'
 

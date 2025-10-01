@@ -26,7 +26,7 @@ def string_to_vw(pauli: str):
 
 def bit(value, position):
     """Check if the bit at position is set (1-indexed)."""
-    return (value & (1 << position)) != 0
+    return (int(value) & (1 << int(position))) != 0
 
 def vw_to_string(v, w, N):
     """
