@@ -20,7 +20,7 @@ def trace(o: Operator):
 
 def operator_from_dict(d, N):
     o = Operator(N)
-    o.strings = np.array(list(d.keys()))
+    o.strings = np.array(list(d.keys()), dtype=np.uint64)
     o.coeffs = np.array(list(d.values()))
     return o
 
@@ -83,11 +83,13 @@ def multiply(o1: Operator, o2: Operator):
 
 
 def commutator(o1: Operator, o2: Operator):
-    return binary_kernel(string_commutator, o1, o2)
+    strings, coeffs = cpp_operations.commutator(cpp_operator(o1), cpp_operator(o2))
+    return new_operator(o1.N, strings, coeffs)
 
 
 def anticommutator(o1: Operator, o2: Operator):
-    return binary_kernel(string_anticommutator, o1, o2)
+    strings, coeffs = cpp_operations.anticommutator(cpp_operator(o1), cpp_operator(o2))
+    return new_operator(o1.N, strings, coeffs)
 
 
 def cpp_operator(op):
@@ -97,7 +99,7 @@ def cpp_operator(op):
 
 def new_operator(N, strings, coeffs):
     o = Operator(N)
-    o.strings = np.array(strings)
+    o.strings = np.array(strings, dtype=np.uint64)
     o.coeffs = np.array(coeffs)
     return o
 

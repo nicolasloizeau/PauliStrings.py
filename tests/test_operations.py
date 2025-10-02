@@ -60,6 +60,27 @@ def test_identity():
     assert len(o.strings) == 1
     assert trace(o) == 2**4
 
+def test_product_np():
+    t = np.linspace(0, 1, 5)
+    s = 0
+    for ti in t:
+        s += trace(ti*o1)
+    assert s==0
+
+
+def test_commutator():
+    a = rand_local2(4)
+    b = rand_local2(4)
+    c = commutator(a, b)
+    d = a * b - b * a
+    assert opnorm(c - d) < 1e-10
+    a = Operator(4)
+    a += 1, "X", 0
+    b = Operator(4)
+    b += 1, "Y", 0
+    c = commutator(a, b)
+    d = a * b - b * a
+    assert opnorm(c - d) < 1e-10
 
 def test_trivial():
     o1 = Operator(4)
@@ -72,3 +93,4 @@ def test_trivial():
     assert opnorm(o1*o3) == 0
     assert opnorm(o2*o3) == 0
     assert opnorm(o1-o2) == 0
+    assert opnorm(commutator(o1,o2)) == 0

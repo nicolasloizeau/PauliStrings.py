@@ -37,3 +37,7 @@ Moments and Powers
 -------------------
 .. autofunction:: paulistrings.trace_product
 .. autofunction:: paulistrings.trace_product_power
+
+Algorithms
+----------------
+.. autofunction:: paulistrings.rk4

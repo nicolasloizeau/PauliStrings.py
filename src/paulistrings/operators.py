@@ -5,6 +5,7 @@ import numpy as np
 
 
 class Operator:
+    __array_priority__ = 1000 # to ensure that numpy operations call our methods
     def __init__(self, N):
         self.N = N
         self.strings = np.empty((0, 2))
@@ -12,7 +13,7 @@ class Operator:
 
     def add_string_uv(self, u: int, v: int, coeff: complex):
         if len(self.strings) == 0:
-            self.strings = np.array([(u, v)])
+            self.strings = np.array([(u, v)], dtype=np.uint64)
             self.coeffs = np.array([coeff])
         else:
             self.strings = np.vstack((np.array(self.strings), np.array((u, v))))
@@ -94,6 +95,8 @@ class Operator:
             return O
         elif isinstance(other, Operator):
             return operations.multiply_cpp(self, other)
+        else:
+            raise TypeError(f"unsupported operand type(s) for *: 'Operator' and '{type(other).__name__}'")
 
     def __rmul__(self, other):
         return self * other
@@ -132,6 +135,13 @@ class Operator:
 def identity(N):
     """Return the identity operator on N qubits."""
     o = Operator(N)
-    o.strings = np.array([(0, 0)])
+    o.strings = np.array([(0, 0)], dtype=np.uint64)
     o.coeffs = np.array([1.0])
     return o
+
+def copy(o:Operator):
+    """Return a copy of the operator."""
+    O = Operator(o.N)
+    O.strings = np.array(o.strings, dtype=np.uint64)
+    O.coeffs = np.array(o.coeffs)
+    return O

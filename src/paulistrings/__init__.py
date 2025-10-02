@@ -9,6 +9,7 @@ __all__ = [
     # From operators
     "Operator",
     "identity",
+    "copy",
     # From operations
     "commutator",
     "anticommutator",
@@ -34,6 +35,8 @@ __all__ = [
     "trace_product_power",
     # From inout
     "todense",
+    # From evolution
+    "rk4"
 ]
 
 
@@ -44,3 +47,4 @@ from .random import rand_local1, rand_local2
 from .truncation import truncate, k_local_part, trim, add_noise, cutoff
 from .moments import trace_product, trace_product_power
 from .inout import todense
+from .evolution import rk4
