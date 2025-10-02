@@ -157,10 +157,10 @@
 <span class="n">norm</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="kp">opnorm</span><span class="p">(</span><span class="nc">H</span><span class="p">)</span>
 
 <span class="c1"># Number of terms in the operator</span>
-<span class="n">num_terms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nc">H</span><span class="o">.</span><span class="n">strings</span><span class="p">)</span>  <span class="c1"># or len(H.coeffs)</span>
+<span class="n">num_terms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nc">H</span><span class="p">)</span>  <span class="c1"># or len(H.coeffs)</span>
 
 <span class="c1"># Commutator [H1, H2] = H1*H2 - H2*H1</span>
-<span class="c1"># This is much more efficient than computing H1*H2 - H2*H1 directly</span>
+<span class="c1"># This is more efficient than computing H1*H2 - H2*H1 directly</span>
 <span class="n">comm</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="kp">commutator</span><span class="p">(</span><span class="nc">H1</span><span class="p">,</span> <span class="nc">H2</span><span class="p">)</span>
 </pre></div>
 </div>
