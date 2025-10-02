@@ -1,6 +1,7 @@
 from . import inout
 import numbers
 import numpy as np
+from pickle import TUPLE
 
 
 class Operator:
@@ -21,25 +22,7 @@ class Operator:
     def __add__(self, other):
         """
         Add another object to this operator.
-
-        Parameters
-        ----------
-        other : str, tuple, Operator, or number
-            The object to add to this operator:
-              - str: a Pauli string to add with coefficient 1
-              - tuple: a Pauli string and coefficient
-              - Operator: another Operator instance
-              - number: identity operator times a constant
-
-        Returns
-        -------
-        Operator
-            A new operator representing the sum.
-
-        Raises
-        ------
-        TypeError
-            If other cannot be added to an operator
+        other can be a string, a tuple (string, coeff), another Operator, or a number (will add identity times other).
         """
         if isinstance(other, str):
             self.add_string_str(other, 1)
@@ -77,25 +60,6 @@ class Operator:
     def __sub__(self, other):
         """
         Subtract another object from this operator.
-
-        Parameters
-        ----------
-        other : str, tuple, Operator, or number
-            The object to subtract from this operator:
-              - str: a Pauli string to subtract with coefficient 1
-              - tuple: a Pauli string and coefficient
-              - Operator: another Operator instance
-              - number: identity operator times a constant
-
-        Returns
-        -------
-        Operator
-            A new operator representing the difference.
-
-        Raises
-        ------
-        TypeError
-            If other cannot be subtracted from an operator
         """
         if isinstance(other, Operator):
             return self + -other
@@ -112,17 +76,7 @@ class Operator:
     def __mul__(self, other):
         """
         Multiply this operator by another object.
-
-        Parameters
-        ----------
-        other : Operator or scalar
-            The object to multiply this operator by.
-
-        Returns
-        -------
-        Operator
-            A new Operator representing the product.
-
+        Other can be a scalar or another Operator.
         """
         from . import operations
 
@@ -140,23 +94,6 @@ class Operator:
     def __truediv__(self, other):
         """
         Divide this operator by a scalar.
-
-        Parameters
-        ----------
-        other : scalar
-            The number to divide this operator by.
-
-        Returns
-        -------
-        Operator
-            A new Operator representing the quotient.
-
-        Raises
-        ------
-        TypeError
-            If other is not a number
-        ZeroDivisionError
-            If other is zero
         """
         if isinstance(other, numbers.Number):
             if other == 0:
@@ -179,6 +116,6 @@ class Operator:
 def identity(N):
     """Return the identity operator on N qubits."""
     o = Operator(N)
-    o.strings = [(0, 0)]
-    o.coeffs = [1.0]
+    o.strings = np.array([(0, 0)])
+    o.coeffs = np.array([1.0])
     return o

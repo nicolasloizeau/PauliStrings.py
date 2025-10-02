@@ -3,21 +3,7 @@ from .operations import *
 
 
 def cutoff(o: Operator, epsilon: float):
-    """Remove all terms with weight < epsilon
-
-    Parameters
-    ----------
-    o: Operator
-        The input operator to filter.
-    epsilon: float
-        The cutoff threshold. Terms with coefficients whose
-        absolute value is less than this will be removed.
-
-    Returns
-    --------
-        Operator
-
-    """
+    """Remove all terms with weight < epsilon."""
     o2 = Operator(o.N)
     for s, c in zip(o.strings, o.coeffs):
         if abs(c) >= epsilon:
@@ -27,20 +13,7 @@ def cutoff(o: Operator, epsilon: float):
 
 
 def truncate(o: Operator, max_length: int) -> Operator:
-    """Remove all terms with Pauli lenght > max_length.
-
-    Parameters
-    ----------
-    o: Operator
-        The input operator to filter.
-    max_length: int
-        The maximum Pauli weight to keep. Terms with Pauli weight
-        greater than this will be removed.
-
-    Returns
-    --------
-        Operator
-    """
+    """Remove all terms with Pauli lenght > max_length."""
     filtered_strings = []
     filtered_coeffs = []
     for string, coeff in zip(o.strings, o.coeffs):
@@ -54,21 +27,8 @@ def truncate(o: Operator, max_length: int) -> Operator:
 
 
 def k_local_part(o: Operator, k: int, atmost: bool = False) -> Operator:
-    """Return the k-local part of an operator (terms with exactly k or at-most k non-unit Paulis).
-
-    Parameters
-    ----------
-    o: Operator
-        The input operator to filter.
-    k: int
-        The Pauli lenght to filter for.
-    atmost: bool
-        If True, will keep terms with Pauli lenght <= k.
-        If False, will only keep terms with Pauli lenght exactly = k.
-
-    Returns
-    --------
-        Operator
+    """
+    Return the k-local part of an operator (terms with exactly k or at-most k non-unit Paulis).
     """
     filtered_strings = []
     filtered_coeffs = []
@@ -83,28 +43,15 @@ def k_local_part(o: Operator, k: int, atmost: bool = False) -> Operator:
     return o2
 
 
-def trim(o: Operator, max_strings: int, keep: Operator = None) -> Operator:
-    """Keep the max_strings Pauli terms with largest absolute coefficients, optionally keeping a specified subset of terms.
-
-    Parameters
-    ----------
-    o: Operator
-        The input operator to trim.
-    max_strings: int
-        Maximum number of strings to keep in the trimmed operator.
-    keep: Operator, optional
-        Operator containing terms that should be kept in the output regardless
-        of coefficient size. Default is None.
-
-    Returns
-    --------
-        Operator
+def trim(o: Operator, nterms: int, keep: Operator = None) -> Operator:
+    """Keep the nterms Pauli terms with largest absolute coefficients.
+    If keep is provided, ensure that all terms in keep are included in the output operator.
     """
     if keep is None:
         keep = Operator(0)
 
     # If operator already has fewer strings than max_strings, return a copy
-    if len(o.strings) <= max_strings:
+    if len(o.strings) <= nterms:
         o2 = Operator(o.N)
         o2.strings = np.copy(o.strings)
         o2.coeffs = np.copy(o.coeffs)
@@ -112,7 +59,7 @@ def trim(o: Operator, max_strings: int, keep: Operator = None) -> Operator:
 
     # Get indices of the largest coefficients by absolute value
     coeff_abs = np.abs(o.coeffs)
-    indices = np.argsort(coeff_abs)[-max_strings:]  # Get indices of max_strings largest values
+    indices = np.argsort(coeff_abs)[-nterms:]  # Get indices of max_strings largest values
 
     # Add strings from keep operator if they exist in o but weren't selected
     if len(keep.strings) > 0:
@@ -135,18 +82,6 @@ def trim(o: Operator, max_strings: int, keep: Operator = None) -> Operator:
 def add_noise(o: Operator, g: float) -> Operator:
     """Add depolarizing noise that make the long string decays.
     g is the noise amplitude. Each string is multiplied by exp(-g * w), where w is the number of non-identity Paulis in the string.
-
-    Parameters
-    ----------
-    o: Operator
-        The input operator to add noise to.
-    g: float
-        The noise parameter that controls the exponential decay of coefficients.
-
-    Returns
-    --------
-        Operator
-            A new operator with noise-modified coefficients.
     """
 
     # Create new operator

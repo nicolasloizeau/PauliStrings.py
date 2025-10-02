@@ -5,11 +5,13 @@ from . import cpp_operations
 
 
 def trace_product(o1: Operator, o2: Operator):
+    """equivalent to trace(o1*o2) but faster"""
     assert o1.N == o2.N
     return cpp_operations.trace_product(cpp_operator(o1), cpp_operator(o2)) * 2**o1.N
 
 
 def trace_product_power(A: Operator, k: int, B: Operator, l: int):
+    """equivalent to trace(A**k * B**l) but faster"""
     assert type(A) == type(B)
     m = (k + l) // 2
     n = k + l - m

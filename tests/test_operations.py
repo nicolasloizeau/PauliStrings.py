@@ -53,3 +53,9 @@ def test_trace():
 def test_dagger():
     o = rand_local2(4)
     assert opnorm(dagger(dagger(o)) - o) < 1e-10
+
+def test_identity():
+    o = identity(4)
+    assert o.N == 4
+    assert len(o.strings) == 1
+    assert trace(o) == 2**4

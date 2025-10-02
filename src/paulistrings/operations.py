@@ -1,6 +1,7 @@
 from .operators import Operator
 from . import cpp_operations
 import numpy as np
+from hmac import new
 
 
 def opnorm(o: Operator):
@@ -94,29 +95,25 @@ def cpp_operator(op):
     coeffs = np.array(op.coeffs, dtype=np.complex128)
     return (strings, coeffs)
 
+def new_operator(N, strings, coeffs):
+    o = Operator(N)
+    o.strings = strings
+    o.coeffs = coeffs
+    return o
 
 def multiply_cpp(o1: Operator, o2: Operator):
-    o3 = Operator(o1.N)
     strings, coeffs = cpp_operations.multiply(cpp_operator(o1), cpp_operator(o2))
-    o3.strings = strings
-    o3.coeffs = coeffs
-    return o3
+    return new_operator(o1.N, strings, coeffs)
 
 
 def commutator_cpp(o1: Operator, o2: Operator):
-    o3 = Operator(o1.N)
     strings, coeffs = cpp_operations.commutator(cpp_operator(o1), cpp_operator(o2))
-    o3.strings = strings
-    o3.coeffs = coeffs
-    return o3
+    return new_operator(o1.N, strings, coeffs)
 
 
 def add_cpp(o1: Operator, o2: Operator):
-    o3 = Operator(o1.N)
     strings, coeffs = cpp_operations.add(cpp_operator(o1), cpp_operator(o2))
-    o3.strings = strings
-    o3.coeffs = coeffs
-    return o3
+    return new_operator(o1.N, strings, coeffs)
 
 
 def pauli_weight(string):
@@ -131,14 +128,7 @@ def ycount(string: tuple) -> int:
 
 
 def dagger(o: Operator) -> Operator:
-    """Return the Hermitian conjugate (dagger) of an operator.
-
-    Args:
-        o: Input operator
-
-    Returns:
-        A new operator representing o†
-    """
+    """Hermitian conjugate (dagger) of an operator."""
     o2 = Operator(o.N)
     o2.strings = o.strings.copy()
     o2.coeffs = np.copy(o.coeffs)
