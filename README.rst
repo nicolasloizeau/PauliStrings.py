@@ -114,10 +114,10 @@ Common operations on operators:
     norm = ps.opnorm(H)
 
     # Number of terms in the operator
-    num_terms = len(H.strings)  # or len(H.coeffs)
+    num_terms = len(H)  # or len(H.coeffs)
 
     # Commutator [H1, H2] = H1*H2 - H2*H1
-    # This is much more efficient than computing H1*H2 - H2*H1 directly
+    # This is more efficient than computing H1*H2 - H2*H1 directly
     comm = ps.commutator(H1, H2)
 
 
