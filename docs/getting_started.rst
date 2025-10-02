@@ -108,7 +108,7 @@ For questions, you can either contact `nicolas.loizeau@nbi.ku.dk` or start a new
 Citation
 ---------
 
-.. code-block::
+.. code-block:: bibtex
 
     @Article{Loizeau2025,
     	title={{Quantum many-body simulations with PauliStrings.jl}},
