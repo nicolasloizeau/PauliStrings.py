@@ -7,12 +7,16 @@ import numpy as np
 class Operator:
     def __init__(self, N):
         self.N = N
-        self.strings = []
-        self.coeffs = []
+        self.strings = np.empty((0, 2))
+        self.coeffs = np.empty(0, dtype=complex)
 
     def add_string_uv(self, u: int, v: int, coeff: complex):
-        self.strings = np.vstack((np.array(self.strings), np.array((u, v))))
-        self.coeffs = np.append(np.array(self.coeffs), coeff)
+        if len(self.strings) == 0:
+            self.strings = np.array([(u, v)])
+            self.coeffs = np.array([coeff])
+        else:
+            self.strings = np.vstack((np.array(self.strings), np.array((u, v))))
+            self.coeffs = np.append(np.array(self.coeffs), coeff)
 
 
     def add_string_str(self, s: str, coeff: complex):
@@ -47,7 +51,7 @@ class Operator:
         elif isinstance(other, Operator):
             from . import operations
 
-            return operations.add(self, other)
+            return operations.add_cpp(self, other)
         elif isinstance(other, numbers.Number):
             return self + identity(self.N) * other
 
@@ -89,7 +93,7 @@ class Operator:
             O.coeffs = np.array(self.coeffs) * other
             return O
         elif isinstance(other, Operator):
-            return operations.multiply(self, other)
+            return operations.multiply_cpp(self, other)
 
     def __rmul__(self, other):
         return self * other
@@ -120,6 +124,9 @@ class Operator:
         """Convert the operator to a dense numpy array: numpy.array(o)"""
         from . import inout
         return inout.todense(self)
+
+    def __len__(self):
+        return len(self.strings)
 
 
 def identity(N):

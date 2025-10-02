@@ -11,7 +11,6 @@ def test_k_local_part():
     a = rand_local2(N)
     b = rand_local1(N)
     o = a * b
-
     o1 = k_local_part(o, 1)
     o2 = k_local_part(o, 2)
     o3 = k_local_part(o, 3)

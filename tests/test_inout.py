@@ -17,5 +17,5 @@ def test_print():
     o += 1.2, "X1YZ"
     o += 0.5, "ZZZZ"
     o += 3, "Y111"
-    s = """(1.2 + 0.0j) X1YZ\n(0.5 + 0.0j) ZZZZ\n(3.0 + 0.0j) Y111\n"""
+    s = """(3.0 + 0.0j) Y111\n(1.2 + 0.0j) X1YZ\n(0.5 + 0.0j) ZZZZ\n"""
     assert str(o) == s

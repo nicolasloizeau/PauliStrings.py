@@ -59,3 +59,16 @@ def test_identity():
     assert o.N == 4
     assert len(o.strings) == 1
     assert trace(o) == 2**4
+
+
+def test_trivial():
+    o1 = Operator(4)
+    o2 = Operator(4)
+    o3 = rand_local2(4)
+    assert trace(o1*o2) == 0
+    assert opnorm(o1) == 0
+    assert opnorm(o2) == 0
+    assert opnorm(o1+o2) == 0
+    assert opnorm(o1*o3) == 0
+    assert opnorm(o2*o3) == 0
+    assert opnorm(o1-o2) == 0

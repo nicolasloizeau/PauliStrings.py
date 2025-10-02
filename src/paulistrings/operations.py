@@ -97,11 +97,13 @@ def cpp_operator(op):
 
 def new_operator(N, strings, coeffs):
     o = Operator(N)
-    o.strings = strings
-    o.coeffs = coeffs
+    o.strings = np.array(strings)
+    o.coeffs = np.array(coeffs)
     return o
 
 def multiply_cpp(o1: Operator, o2: Operator):
+    if len(o1) == 0 or len(o2) == 0:
+        return Operator(o1.N)
     strings, coeffs = cpp_operations.multiply(cpp_operator(o1), cpp_operator(o2))
     return new_operator(o1.N, strings, coeffs)
 
@@ -112,6 +114,10 @@ def commutator_cpp(o1: Operator, o2: Operator):
 
 
 def add_cpp(o1: Operator, o2: Operator):
+    if len(o1) == 0:
+        return o2
+    if len(o2) == 0:
+        return o1
     strings, coeffs = cpp_operations.add(cpp_operator(o1), cpp_operator(o2))
     return new_operator(o1.N, strings, coeffs)
 

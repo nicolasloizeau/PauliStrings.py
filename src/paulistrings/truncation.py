@@ -4,12 +4,13 @@ from .operations import *
 
 def cutoff(o: Operator, epsilon: float):
     """Remove all terms with weight < epsilon."""
-    o2 = Operator(o.N)
+    strings = []
+    coeffs = []
     for s, c in zip(o.strings, o.coeffs):
         if abs(c) >= epsilon:
-            o2.strings.append(s)
-            o2.coeffs.append(c)
-    return o2
+            strings.append(s)
+            coeffs.append(c)
+    return new_operator(o.N, strings, coeffs)
 
 
 def truncate(o: Operator, max_length: int) -> Operator:
