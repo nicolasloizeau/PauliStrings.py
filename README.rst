@@ -1,5 +1,5 @@
 
-.. image:: https://github.com/nicolasloizeau/PauliStrings.py/actions/workflows/test.yml/badge
+.. image:: https://github.com/nicolasloizeau/PauliStrings.py/actions/workflows/test.yml/badge.svg
     :target: https://github.com/nicolasloizeau/PauliStrings.py/actions/workflows/test.yml
     :alt: Tests Status
 
