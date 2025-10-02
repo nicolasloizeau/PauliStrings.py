@@ -2,7 +2,7 @@
 name = "paulistrings"
 version = "0.1.0"
 description = "Quantum many body simulations with Pauli strings"
-readme = "README.md"
+readme = "README.rst"
 authors = [{ name = "Nicolas Loizeau", email = "nicolasloizeau@gmail.com" }]
 maintainers = [{ name = "Nicolas Loizeau", email = "nicolasloizeau@gmail.com" }]
 classifiers = []

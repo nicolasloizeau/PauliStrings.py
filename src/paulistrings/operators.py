@@ -171,6 +171,10 @@ class Operator:
     def __str__(self):
         return inout.operator_to_string(self)
 
+    def __pow__(self, exponent):
+        from . import moments
+        return moments.power_by_squaring(self, exponent)
+
 
 def identity(N):
     """Return the identity operator on N qubits."""

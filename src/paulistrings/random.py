@@ -2,7 +2,13 @@ from .operators import Operator
 import random
 from itertools import product
 
+
+
+
 def rand_local2(N:int):
+    """
+    Random 2-local operator of N qubits.
+    """
     o = Operator(N)
     for i, j in product(range(N), range(N)):
         if i != j:
@@ -12,6 +18,9 @@ def rand_local2(N:int):
 
 
 def rand_local1(N:int):
+    """
+    Random 1-local operator of N qubits.
+    """
     o = Operator(N)
     for i in range(N):
         for k in ['X', 'Y', 'Z']:

@@ -33,3 +33,11 @@
   background-color: #e0e0e0;
   color: #000000;
 }
+
+.rst-content pre,
+.rst-content .literal-block,
+.highlight,
+div[class^="highlight-"] {
+  border-radius: 8px !important;
+  overflow: auto;
+}

@@ -41,6 +41,8 @@ html_context = {
     "conf_py_path": "/docs/",
 }
 
+pygments_style = "friendly"
+
 html_logo = "_static/logo_cat_small.svg"
 html_favicon = "_static/favicon.png"
 html_css_files = [

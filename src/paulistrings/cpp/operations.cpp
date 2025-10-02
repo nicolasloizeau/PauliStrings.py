@@ -125,6 +125,43 @@ Operator anticommutator(const Operator& o1, const Operator& o2) {
 }
 
 
+std::complex<double> trace_product(const Operator& o1, const Operator& o2) {
+    auto strings1 = o1.first.unchecked<2>();
+    auto coeffs1 = o1.second.unchecked<1>();
+    auto strings2 = o2.first.unchecked<2>();
+    auto coeffs2 = o2.second.unchecked<1>();
+
+    ssize_t N1 = strings1.shape(0);
+    ssize_t N2 = strings2.shape(0);
+
+    // If o1 is smaller, swap
+    if (N1 < N2) {
+        return trace_product(o2, o1);
+    }
+
+    // Check lengths
+    if (N1 != coeffs1.shape(0) || N2 != coeffs2.shape(0)) {
+        throw std::runtime_error("strings and coefficients must have the same length");
+    }
+
+    Dict d = operator_to_map(o2);
+
+    std::complex<double> tr = 0.0;
+    for (ssize_t i = 0; i < N1; ++i) {
+        String p1{strings1(i,0), strings1(i,1)};
+        std::complex<double> c1 = coeffs1(i);
+        auto it = d.find(p1);
+        if (it == d.end()) continue; // skip if not found
+        std::complex<double> c2 = it->second;
+        auto [p, k] = string_multiply(p1, p1);
+        tr += c1 * c2 * double(k);
+    }
+
+    return tr;
+}
+
+
+
 
 
 PYBIND11_MODULE(cpp_operations, m) {
@@ -133,4 +170,5 @@ PYBIND11_MODULE(cpp_operations, m) {
     m.def("multiply", &multiply, "Multiplication");
     m.def("commutator", &commutator, "Commutator");
     m.def("anticommutator", &anticommutator, "Anticommutator");
+    m.def("trace_product", &trace_product, "Trace of a product");
 }

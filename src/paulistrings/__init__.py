@@ -28,6 +28,9 @@ __all__ = [
     # From random
     "rand_local1",
     "rand_local2",
+    # From moments
+    "trace_product",
+    "trace_product_power",
 ]
 
 
@@ -36,3 +39,4 @@ from .operations import commutator, anticommutator, add, multiply, opnorm, trace
 from .operations import multiply_cpp, add_cpp, commutator_cpp
 from .random import rand_local1, rand_local2
 from .truncation import truncate, k_local_part, trim, add_noise, cutoff
+from .moments import trace_product, trace_product_power
