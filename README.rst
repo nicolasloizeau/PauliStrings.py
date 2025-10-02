@@ -1,9 +1,9 @@
 
-.. image:: https://github.com/nicolasloizeau/PauliStrings.py/actions/workflows/test.yml/badge.svg
+.. image:: https://github.com/nicolasloizeau/PauliStrings.py/actions/workflows/test.yml/badge
     :target: https://github.com/nicolasloizeau/PauliStrings.py/actions/workflows/test.yml
     :alt: Tests Status
 
-.. image:: https://img.shields.io/badge/docs-blue.svg
+.. image:: https://img.shields.io/badge/docs-blue
     :target: https://nicolasloizeau.github.io/PauliStrings.py/
     :alt: Documentation
 
