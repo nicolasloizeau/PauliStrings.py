@@ -1,3 +1,8 @@
+import re
+import numpy as np
+from paulistrings.operators import Operator
+
+
 def string_to_vw(pauli: str):
     """
     Convert a Pauli string ('X', 'Y', 'Z' characters) to binary vectors v and w.
@@ -98,3 +103,26 @@ def operator_to_string(o):
         string, phase = vw_to_string(u, v, o.N)
         s += f"{_complex_str(coeff / phase)} {string}\n"
     return s
+
+
+def string_to_dense(s):
+    paulis = {'1': np.array([[1, 0j], [0, 1]]),
+              'X': np.array([[0, 1], [1, 0j]]),
+              'Y': np.array([[0, -1j], [1j, 0]]),
+              'Z': np.array([[1, 0j], [0, -1]])}
+    res = 1
+    for c in s:
+        res = np.kron(res, paulis[c])
+    return res
+
+
+def todense(o):
+    """Convert a Pauli string operator to a dense numpy array.
+    Equivalent to numpy.array(o)
+    """
+    res = 0
+    for (u, v), coeff in zip(o.strings, o.coeffs):
+        string, phase = vw_to_string(u, v, o.N)
+        p = string_to_dense(string)
+        res += coeff / phase * p
+    return res

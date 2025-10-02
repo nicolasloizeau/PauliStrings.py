@@ -1,7 +1,7 @@
-from . import inout
+
 import numbers
 import numpy as np
-from pickle import TUPLE
+
 
 
 class Operator:
@@ -11,10 +11,12 @@ class Operator:
         self.coeffs = []
 
     def add_string_uv(self, u: int, v: int, coeff: complex):
-        self.strings.append((u, v))
-        self.coeffs.append(coeff)
+        self.strings = np.vstack((np.array(self.strings), np.array((u, v))))
+        self.coeffs = np.append(np.array(self.coeffs), coeff)
+
 
     def add_string_str(self, s: str, coeff: complex):
+        from . import inout
         u, v, phase = inout.string_to_vw(s)
         c = coeff * phase
         self.add_string_uv(u, v, c)
@@ -37,6 +39,7 @@ class Operator:
             o2.add_string_str(other[1], other[0])
             return self + o2
         elif isinstance(other, tuple):
+            from . import inout
             c, s = inout.local_term_to_str(other, self.N)
             o2 = Operator(self.N)
             o2.add_string_str(s, c)
@@ -106,11 +109,17 @@ class Operator:
             raise TypeError(f"unsupported operand type(s) for /: 'Operator' and '{type(other).__name__}'")
 
     def __str__(self):
+        from . import inout
         return inout.operator_to_string(self)
 
     def __pow__(self, exponent):
         from . import moments
         return moments.power_by_squaring(self, exponent)
+
+    def __array__(self):
+        """Convert the operator to a dense numpy array: numpy.array(o)"""
+        from . import inout
+        return inout.todense(self)
 
 
 def identity(N):

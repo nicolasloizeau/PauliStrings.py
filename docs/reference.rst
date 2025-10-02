@@ -11,6 +11,7 @@ Core Functions
 .. autofunction:: paulistrings.Operator.__truediv__
 .. autofunction:: paulistrings.Operator.__str__
 .. autofunction:: paulistrings.Operator.__pow__
+.. autofunction:: paulistrings.Operator.__array__
 .. autofunction:: paulistrings.commutator
 .. autofunction:: paulistrings.anticommutator
 .. autofunction:: paulistrings.trace
