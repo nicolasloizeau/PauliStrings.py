@@ -22,12 +22,10 @@ PauliStrings Python
 This is a Python version of `PauliStrings.jl <https://paulistrings.org/>`_. The Julia version is more mature, we recommend using it if you can.
 
 
-Documentation
--------------
-https://nicolasloizeau.github.io/PauliStrings.py/
 
 Getting started
 ================
+
 
 Installation
 -------------
@@ -35,6 +33,10 @@ Install from github::
 
     pip install git+https://github.com/nicolasloizeau/paulistrings.py.git
 
+
+Documentation
+-------------
+https://nicolasloizeau.github.io/PauliStrings.py/
 
 Creating Operators
 -----------------
