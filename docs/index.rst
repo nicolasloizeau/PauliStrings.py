@@ -29,7 +29,6 @@ This is a Python version of `PauliStrings.jl <https://paulistrings.org/>`_. The 
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    getting_started
    tutorials/index
