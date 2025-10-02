@@ -107,24 +107,27 @@ For questions, you can either contact `nicolas.loizeau@nbi.ku.dk` or start a new
 
 Citation
 ---------
-@Article{Loizeau2025,
-	title={{Quantum many-body simulations with PauliStrings.jl}},
-	author={Nicolas Loizeau and J. Clayton Peacock and Dries Sels},
-	journal={SciPost Phys. Codebases},
-	pages={54},
-	year={2025},
-	publisher={SciPost},
-	doi={10.21468/SciPostPhysCodeb.54},
-	url={https://scipost.org/10.21468/SciPostPhysCodeb.54},
-}
 
-@Article{Loizeau2025,
-	title={{Codebase release 1.5 for PauliStrings.jl}},
-	author={Nicolas Loizeau and J. Clayton Peacock and Dries Sels},
-	journal={SciPost Phys. Codebases},
-	pages={54-r1.5},
-	year={2025},
-	publisher={SciPost},
-	doi={10.21468/SciPostPhysCodeb.54-r1.5},
-	url={https://scipost.org/10.21468/SciPostPhysCodeb.54-r1.5},
-}
+.. code-block::
+
+    @Article{Loizeau2025,
+    	title={{Quantum many-body simulations with PauliStrings.jl}},
+    	author={Nicolas Loizeau and J. Clayton Peacock and Dries Sels},
+    	journal={SciPost Phys. Codebases},
+    	pages={54},
+    	year={2025},
+    	publisher={SciPost},
+    	doi={10.21468/SciPostPhysCodeb.54},
+    	url={https://scipost.org/10.21468/SciPostPhysCodeb.54},
+    }
+
+    @Article{Loizeau2025,
+    	title={{Codebase release 1.5 for PauliStrings.jl}},
+    	author={Nicolas Loizeau and J. Clayton Peacock and Dries Sels},
+    	journal={SciPost Phys. Codebases},
+    	pages={54-r1.5},
+    	year={2025},
+    	publisher={SciPost},
+    	doi={10.21468/SciPostPhysCodeb.54-r1.5},
+    	url={https://scipost.org/10.21468/SciPostPhysCodeb.54-r1.5},
+    }
