@@ -22,3 +22,9 @@ Truncation
 .. autofunction:: paulistrings.trim
 .. autofunction:: paulistrings.add_noise
 .. autofunction:: paulistrings.k_local_part
+
+
+Random Operators
+-----------------
+.. autofunction:: paulistrings.rand_local2
+.. autofunction:: paulistrings.rand_local1

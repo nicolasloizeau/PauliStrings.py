@@ -6,11 +6,11 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Construction &mdash; Pauli Strings Python  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=0745d1ac" />
+  <title>Constructing Operators &mdash; Pauli Strings Python  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d75fae25" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/github_style.css?v=1093691d" />
-      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=2be4d437" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=c8474c7c" />
 
   
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -19,6 +19,7 @@
       <script src="../_static/documentation_options.js?v=5929fcd5"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -50,7 +51,10 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Construction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Constructing Operators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#d-transverse-ising-model">1D Transverse Ising Model</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="truncation.html">Truncation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="evolution.html">Time evolution</a></li>
 </ul>
@@ -73,7 +77,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
-      <li class="breadcrumb-item active">Construction</li>
+      <li class="breadcrumb-item active">Constructing Operators</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/nicolasloizeau/PauliStrings.py/blob/main/docs/tutorials/construction.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -83,9 +87,60 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="construction">
-<h1>Construction<a class="headerlink" href="#construction" title="Link to this heading"></a></h1>
-<p>TODO</p>
+  <section id="constructing-operators">
+<h1>Constructing Operators<a class="headerlink" href="#constructing-operators" title="Link to this heading"></a></h1>
+<p>Start by importing the PauliStrings module:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">paulistrings</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</pre></div>
+</div>
+<p>To construct an operator, first declare an empty operator for <span class="math notranslate nohighlight">\(N\)</span> qubits:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nc">H</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="nc">Operator</span><span class="p">(</span><span class="nc">N</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">paulistrings</span></code> supports up to 64 qubits.</p>
+</div>
+<p>You can add a term of the form <span class="math notranslate nohighlight">\(J X_i\)</span> by doing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nc">H</span> <span class="o">+=</span> <span class="nc">J</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">i</span>
+</pre></div>
+</div>
+<p>and a term of the form <span class="math notranslate nohighlight">\(J X_i X_j\)</span> by doing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nc">H</span> <span class="o">+=</span> <span class="nc">J</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">j</span>
+</pre></div>
+</div>
+<p>Similarly, to add a term of the form <span class="math notranslate nohighlight">\(J X_i X_j X_k\)</span>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nc">H</span> <span class="o">+=</span> <span class="nc">J</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">k</span>
+</pre></div>
+</div>
+<p>etc.</p>
+<section id="d-transverse-ising-model">
+<h2>1D Transverse Ising Model<a class="headerlink" href="#d-transverse-ising-model" title="Link to this heading"></a></h2>
+<p>Let’s construct the Hamiltonian of a <a class="reference external" href="https://en.wikipedia.org/wiki/Transverse-field_Ising_model">1D transverse Ising model</a>:</p>
+<div class="math notranslate nohighlight">
+\[H = -J \left( \sum_{\langle i,j \rangle} Z_i Z_j + g \sum_i X_i \right)\]</div>
+<p>Here is a Python function to build the Hamiltonian for a 1D transverse Ising model with periodic boundary conditions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">paulistrings</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ising1D</span><span class="p">(</span><span class="nc">N</span><span class="p">,</span> <span class="nc">J</span><span class="p">,</span> <span class="n">g</span><span class="p">):</span>
+    <span class="nc">H</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="nc">Operator</span><span class="p">(</span><span class="nc">N</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nc">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="nc">H</span> <span class="o">+=</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="nc">H</span> <span class="o">+=</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="nc">N</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># periodic boundary condition</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nc">N</span><span class="p">):</span>
+        <span class="nc">H</span> <span class="o">+=</span> <span class="n">g</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">j</span>
+    <span class="k">return</span> <span class="o">-</span><span class="nc">J</span> <span class="o">*</span> <span class="nc">H</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In Python, qubit indices start at 0 (unlike Julia, which starts at 1).</p>
+</div>
+<p>Operators can be printed in string format using the <code class="docutils literal notranslate"><span class="pre">print</span></code> function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="kp">ising1D</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 
