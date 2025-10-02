@@ -22,6 +22,10 @@ PauliStrings Python
 This is a Python version of `PauliStrings.jl <https://paulistrings.org/>`_. The Julia version is more mature, we recommend using it if you can.
 
 
+Documentation
+-------------
+https://nicolasloizeau.github.io/PauliStrings.py/
+
 Getting started
 ================
 
