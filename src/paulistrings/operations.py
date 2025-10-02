@@ -4,10 +4,16 @@ import numpy as np
 
 
 def opnorm(o: Operator):
+    """
+    Frobenius norm of an operator
+    """
     return np.linalg.norm(o.coeffs) * (2 ** (o.N / 2))
 
 
 def trace(o: Operator):
+    """
+    Trace of an operator
+    """
     return o.coeffs[np.all(o.strings == 0, axis=1)].sum() * 2**o.N
 
 
