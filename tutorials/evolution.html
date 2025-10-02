@@ -19,6 +19,7 @@
       <script src="../_static/documentation_options.js?v=5929fcd5"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -85,7 +86,85 @@
              
   <section id="time-evolution">
 <h1>Time evolution<a class="headerlink" href="#time-evolution" title="Link to this heading"></a></h1>
-<p>TODO</p>
+<p>Time evolution with <code class="docutils literal notranslate"><span class="pre">paulistrings.py</span></code> is performed in the Heisenberg picture. This is because pure states are rank-1 density matrices, and low-rank density matrices cannot be efficiently encoded as a sum of Pauli strings.</p>
+<p>The advantage of working with Pauli strings is that noisy systems can be efficiently simulated in this representation ([Schuster 2024](<a class="reference external" href="https://arxiv.org/abs/2407.12768">https://arxiv.org/abs/2407.12768</a>)). Depolarizing noise causes long strings to decay, making simulations tractable by combining noise with truncation.</p>
+<p>Let’s time-evolve the operator <span class="math notranslate nohighlight">\(Z_1\)</span> in the chaotic spin chain:</p>
+<div class="math notranslate nohighlight">
+\[H = \sum_i X_i X_{i+1} - 1.05 Z_i + h_X X_i\]</div>
+<p>First, we construct the Hamiltonian:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">paulistrings</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ps</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">chaotic_chain</span><span class="p">(</span><span class="nc">N</span><span class="p">):</span>
+    <span class="nc">H</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="nc">Operator</span><span class="p">(</span><span class="nc">N</span><span class="p">)</span>
+    <span class="c1"># XX interactions</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nc">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="nc">H</span> <span class="o">+=</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="nc">H</span> <span class="o">+=</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="nc">N</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># close the chain (periodic)</span>
+    <span class="c1"># fields</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nc">N</span><span class="p">):</span>
+        <span class="nc">H</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">1.05</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="n">j</span>
+        <span class="nc">H</span> <span class="o">+=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">j</span>
+    <span class="k">return</span> <span class="nc">H</span>
+</pre></div>
+</div>
+<p>We initialize a Hamiltonian and the <span class="math notranslate nohighlight">\(Z_1\)</span> operator on a 32 spins system.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nc">N</span> <span class="o">=</span> <span class="mi">32</span>  <span class="c1"># system size</span>
+<span class="nc">H</span> <span class="o">=</span> <span class="kp">chaotic_chain</span><span class="p">(</span><span class="nc">N</span><span class="p">)</span>  <span class="c1"># Hamiltonian</span>
+<span class="nc">O</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="nc">Operator</span><span class="p">(</span><span class="nc">N</span><span class="p">)</span>    <span class="c1"># Operator to time evolve</span>
+<span class="nc">O</span> <span class="o">+=</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="mi">0</span>         <span class="c1"># Z on site 1 (Python is 0-based)</span>
+</pre></div>
+</div>
+<p>Now we write a function that will time-evolve an operator <code class="docutils literal notranslate"><span class="pre">O</span></code> under a Hamiltonian <code class="docutils literal notranslate"><span class="pre">H</span></code> and return an observable. Here, we are interested in recording the correlator</p>
+<div class="math notranslate nohighlight">
+\[S(t) = \frac{1}{2^N} \mathrm{Tr} \left[ Z_1(t) Z_1(0) \right].\]</div>
+<p>We will time-evolve <code class="docutils literal notranslate"><span class="pre">O</span></code> by integrating the von Neumann equation</p>
+<div class="math notranslate nohighlight">
+\[i \frac{dO}{dt} = -[H, O]\]</div>
+<p>using the Runge-Kutta method (see <code class="xref py py-func docutils literal notranslate"><span class="pre">rk4()</span></code>). At each time step, we do three things:</p>
+<ol class="arabic simple">
+<li><p>Perform a <code class="xref py py-func docutils literal notranslate"><span class="pre">rk4()</span></code> step.</p></li>
+<li><p>Apply <code class="xref py py-func docutils literal notranslate"><span class="pre">add_noise()</span></code> to make long strings decay.</p></li>
+<li><p>Use <code class="xref py py-func docutils literal notranslate"><span class="pre">trim()</span></code> to keep only the <code class="docutils literal notranslate"><span class="pre">M</span></code> strings with the largest weight.</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Heisenberg evolution of the operator O using rk4</span>
+<span class="c1"># Returns tr(O(0)*O(t))/tr(O(t)^2)</span>
+<span class="c1"># M is the number of strings to keep at each step</span>
+<span class="c1"># noise is the amplitude of depolarizing noise</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">evolve</span><span class="p">(</span><span class="nc">H</span><span class="p">,</span> <span class="nc">O</span><span class="p">,</span> <span class="nc">M</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">noise</span><span class="p">):</span>
+    <span class="n">echo</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="nc">O0</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="kp">copy</span><span class="p">(</span><span class="nc">O</span><span class="p">)</span>  <span class="c1"># assuming you have a copy method</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">times</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="kp">tqdm</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+        <span class="n">numerator</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="kp">trace</span><span class="p">(</span><span class="nc">O</span> <span class="o">*</span> <span class="n">ps</span><span class="o">.</span><span class="kp">dagger</span><span class="p">(</span><span class="nc">O0</span><span class="p">))</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="kp">trace</span><span class="p">(</span><span class="nc">O0</span> <span class="o">*</span> <span class="nc">O0</span><span class="p">)</span>
+        <span class="n">echo</span><span class="o">.</span><span class="kp">append</span><span class="p">(</span><span class="n">numerator</span> <span class="o">/</span> <span class="n">denominator</span><span class="p">)</span>
+        <span class="c1"># Perform one step of rk4, keep only M strings, do not discard O0</span>
+        <span class="nc">O</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="kp">rk4</span><span class="p">(</span><span class="nc">H</span><span class="p">,</span> <span class="nc">O</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">heisenberg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nc">M</span><span class="o">=</span><span class="nc">M</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="nc">O0</span><span class="p">)</span>
+        <span class="c1"># Add depolarizing noise</span>
+        <span class="nc">O</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="kp">add_noise</span><span class="p">(</span><span class="nc">O</span><span class="p">,</span> <span class="n">noise</span> <span class="o">*</span> <span class="n">dt</span><span class="p">)</span>
+        <span class="c1"># Keep the M strings with the largest weight. Do not discard O0</span>
+        <span class="nc">O</span> <span class="o">=</span> <span class="n">ps</span><span class="o">.</span><span class="kp">trim</span><span class="p">(</span><span class="nc">O</span><span class="p">,</span> <span class="nc">M</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="nc">O0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="kp">real</span><span class="p">(</span><span class="n">echo</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we can actually time evolve O for different trim values and plot the result:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Time evolve O for different trim values</span>
+<span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="k">for</span> <span class="n">trim</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">):</span>
+    <span class="nc">S</span> <span class="o">=</span> <span class="kp">evolve</span><span class="p">(</span><span class="nc">H</span><span class="p">,</span> <span class="nc">O</span><span class="p">,</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">trim</span><span class="p">,</span> <span class="n">times</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="kp">loglog</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="nc">S</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;2^</span><span class="si">{</span><span class="n">trim</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="kp">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="kp">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N=</span><span class="si">{</span><span class="nc">N</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="kp">xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="kp">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{tr}</span><span class="s2">(Z_1(0) Z_1(t))$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="kp">savefig</span><span class="p">(</span><span class="s2">&quot;time_evolve_example.png&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="kp">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/time_evolve_example.png" src="../_images/time_evolve_example.png" />
 </section>
 
 
