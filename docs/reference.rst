@@ -10,6 +10,7 @@ Core Functions
 .. autofunction:: paulistrings.Operator.__sub__
 .. autofunction:: paulistrings.Operator.__truediv__
 .. autofunction:: paulistrings.Operator.__str__
+.. autofunction:: paulistrings.Operator.__pow__
 .. autofunction:: paulistrings.commutator
 .. autofunction:: paulistrings.anticommutator
 .. autofunction:: paulistrings.trace
@@ -30,3 +31,8 @@ Random Operators
 -----------------
 .. autofunction:: paulistrings.rand_local2
 .. autofunction:: paulistrings.rand_local1
+
+Moments and Powers
+-------------------
+.. autofunction:: paulistrings.trace_product
+.. autofunction:: paulistrings.trace_product_power
