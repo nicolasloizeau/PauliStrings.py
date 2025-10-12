@@ -21,7 +21,7 @@ ext_modules = [
 
 setup(
     name="paulistrings",
-    version="0.1.0",
+    version="1.0.0",
     description="Quantum many body simulations with Pauli strings",
     author="Nicolas Loizeau",
     packages=find_packages(where="src"),
@@ -31,6 +31,11 @@ setup(
     install_requires=[
         "numpy",
         "pybind11",
+    ],
+    classifiers=[
+        "Topic :: Scientific/Engineering :: Physics",
+        "Topic :: Scientific/Engineering :: Quantum Computing",
+        "Intended Audience :: Science/Research",
     ],
     zip_safe=False,
 )
