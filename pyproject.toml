@@ -20,17 +20,9 @@ test = [
 ]
 
 [project.urls]
-bugs = "https://github.com/nicolasloizeau/paulistrings/issues"
-changelog = "https://github.com/nicolasloizeau/paulistrings/blob/master/changelog.md"
-homepage = "https://github.com/nicolasloizeau/paulistrings"
+bugs = "https://github.com/nicolasloizeau/paulistrings.py/issues"
+homepage = "https://github.com/nicolasloizeau/paulistrings.py"
 
-[project.scripts]
-paulistrings = "paulistrings.cli:app"
-
-[tool.ty]
-# All rules are enabled as "error" by default; no need to specify unless overriding.
-# Example override: relax a rule for the entire project (uncomment if needed).
-# rules.TY015 = "warn"  # For invalid-argument-type, warn instead of error.
 
 [tool.ruff]
 line-length = 120
