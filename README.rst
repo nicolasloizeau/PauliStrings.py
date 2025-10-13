@@ -15,11 +15,11 @@
     :target: https://scipost.org/SciPostPhysCodeb.54
     :alt: SciPost
 
-=================
+====================
 PauliStrings Python
-=================
+====================
 
-This is a Python version of `PauliStrings.jl <https://paulistrings.org/>`_. The Julia version is more mature, we recommend using it if you can.
+This is a Python version of `PauliStrings.jl <https://paulistrings.org/>`_. The Julia version is more mature, we recommend using it if possible.
 
 
 
@@ -29,9 +29,18 @@ Getting started
 
 Installation
 -------------
-Install from github::
+Install with pip:
+
+.. code-block:: bash
+
+    pip install paulistrings
+
+Install the dev version from github:
+
+.. code-block:: bash
 
     pip install git+https://github.com/nicolasloizeau/paulistrings.py.git
+
 
 
 Documentation
@@ -39,7 +48,7 @@ Documentation
 https://nicolasloizeau.github.io/PauliStrings.py/
 
 Creating Operators
------------------
+-------------------
 
 Import the library and initialize an operator of 4 qubits:
 

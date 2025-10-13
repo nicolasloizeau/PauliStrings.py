@@ -1,11 +1,10 @@
-
 import numbers
 import numpy as np
 
 
-
 class Operator:
-    __array_priority__ = 1000 # to ensure that numpy operations call our methods
+    __array_priority__ = 1000  # to ensure that numpy operations call our methods
+
     def __init__(self, N):
         self.N = N
         self.strings = np.empty((0, 2))
@@ -19,9 +18,9 @@ class Operator:
             self.strings = np.vstack((np.array(self.strings), np.array((u, v))))
             self.coeffs = np.append(np.array(self.coeffs), coeff)
 
-
     def add_string_str(self, s: str, coeff: complex):
         from . import inout
+
         u, v, phase = inout.string_to_vw(s)
         c = coeff * phase
         self.add_string_uv(u, v, c)
@@ -45,6 +44,7 @@ class Operator:
             return self + o2
         elif isinstance(other, tuple):
             from . import inout
+
             c, s = inout.local_term_to_str(other, self.N)
             o2 = Operator(self.N)
             o2.add_string_str(s, c)
@@ -117,15 +117,21 @@ class Operator:
 
     def __str__(self):
         from . import inout
+
         return inout.operator_to_string(self)
+
+    def __repr__(self):
+        return self.__str__()
 
     def __pow__(self, exponent):
         from . import moments
+
         return moments.power_by_squaring(self, exponent)
 
     def __array__(self):
         """Convert the operator to a dense numpy array: numpy.array(o)"""
         from . import inout
+
         return inout.todense(self)
 
     def __len__(self):
@@ -139,7 +145,8 @@ def identity(N):
     o.coeffs = np.array([1.0])
     return o
 
-def copy(o:Operator):
+
+def copy(o: Operator):
     """Return a copy of the operator."""
     O = Operator(o.N)
     O.strings = np.array(o.strings, dtype=np.uint64)

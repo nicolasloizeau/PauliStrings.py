@@ -6,6 +6,8 @@ import setuptools
 
 import pybind11
 
+with open("README.rst", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
 
 ext_modules = [
     Extension(
@@ -21,8 +23,10 @@ ext_modules = [
 
 setup(
     name="paulistrings",
-    version="1.0.0",
+    version="0.1.1",
     description="Quantum many body simulations with Pauli strings",
+    long_description=long_description,
+    long_description_content_type="text/x-rst",
     author="Nicolas Loizeau",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
@@ -38,4 +42,5 @@ setup(
         "Intended Audience :: Science/Research",
     ],
     zip_safe=False,
+    url="https://github.com/nicolasloizeau/PauliStrings.py",
 )

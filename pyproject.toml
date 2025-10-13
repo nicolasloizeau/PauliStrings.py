@@ -1,6 +1,6 @@
 [project]
 name = "paulistrings"
-version = "0.1.0"
+version = "0.1.1"
 description = "Quantum many body simulations with Pauli strings"
 readme = "README.rst"
 authors = [{ name = "Nicolas Loizeau", email = "nicolasloizeau@gmail.com" }]
